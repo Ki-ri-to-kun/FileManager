@@ -1,6 +1,7 @@
 import os from 'os';
+import fs from 'fs';
 
-import {UP_OP, CD_OP} from './constants.js';
+import {UP_OP, CD_OP, LS_OP} from './constants.js';
 
 // 1. Hello
 const args = process.argv.slice(2);
@@ -38,8 +39,31 @@ const byeUser = () => {
             const path = stringData.split(CD_OP)[1].trim();
             process.chdir(path);
             printWorkingDir();
-        } else if(stringData === 'command3'){
-            console.log('executing command3'); 
+        } else if(stringData === LS_OP){
+          const dirContent = [];
+
+          fs.readdir(process.cwd(), (err, files) => {
+            
+             for(const item of files){
+              let itemType = undefined;
+              if(fs.lstatSync(item).isDirectory()){
+                itemType = 'directory';
+              } else if(fs.lstatSync(item).isFile()){
+                itemType = 'file';
+              }
+              const newItem = {Name: item, Type: itemType}
+              dirContent.push(newItem);
+             }
+             
+             dirContent.sort((a, b) => {
+               if(a.Type < b.Type) return -1;
+               if(a.Type > b.Type) return 1;
+               if(a.Type = b.Type) return 0;
+             });
+            console.table(dirContent);
+            printWorkingDir();
+            
+        }); 
         } else if(stringData === 'command4'){
             console.log('executing command4'); 
         } else {
