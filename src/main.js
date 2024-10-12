@@ -1,7 +1,7 @@
 import os from 'os';
 import fs from 'fs';
 
-import {UP_OP, CD_OP, LS_OP} from './constants.js';
+import {UP_OP, CD_OP, LS_OP, CAT_OP} from './constants.js';
 
 // 1. Hello
 const args = process.argv.slice(2);
@@ -17,7 +17,6 @@ console.log(`Welcome to the File Manager, ${capitalizedName}!`);
 process.chdir(os.homedir());
 
 printWorkingDir();
-
 
 // 2. Bye
 const byeUser = () => {
@@ -64,8 +63,11 @@ const byeUser = () => {
             printWorkingDir();
             
         }); 
-        } else if(stringData === 'command4'){
-            console.log('executing command4'); 
+        } else if(stringData.startsWith(CAT_OP)){
+            const path = stringData.split(CAT_OP)[1].trim();
+            const readStream = fs.createReadStream(path);
+            readStream.on('data', (data) => console.log(data.toString()));
+            
         } else {
           showInvalidMessage();
         }
