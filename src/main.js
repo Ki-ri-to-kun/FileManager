@@ -1,7 +1,7 @@
 import os from 'os';
 import fs from 'fs';
 
-import {UP_OP, CD_OP, LS_OP, CAT_OP} from './constants.js';
+import {UP_OP, CD_OP, LS_OP, CAT_OP, ADD_OP} from './constants.js';
 
 // 1. Hello
 const args = process.argv.slice(2);
@@ -67,6 +67,13 @@ const byeUser = () => {
             const path = stringData.split(CAT_OP)[1].trim();
             const readStream = fs.createReadStream(path);
             readStream.on('data', (data) => console.log(data.toString()));
+            printWorkingDir();
+            
+        } else if(stringData.startsWith(ADD_OP)){
+            const path = stringData.split(ADD_OP)[1].trim();
+            const readStream = fs.createReadStream(path);
+            fs.openSync(path, 'a');
+            printWorkingDir();
             
         } else {
           showInvalidMessage();
