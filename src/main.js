@@ -1,7 +1,7 @@
 import os from 'os';
 import fs from 'fs';
 
-import {UP_OP, CD_OP, LS_OP, CAT_OP, ADD_OP} from './constants.js';
+import {OPERATION} from './constants.js';
 
 // 1. Hello
 const args = process.argv.slice(2);
@@ -31,14 +31,14 @@ const byeUser = () => {
       const stringData = data.toString().trim();
         if(stringData === '.exit'){
           byeUser();
-        } else if(stringData === UP_OP){
+        } else if(stringData === OPERATION.UP){
             process.cwd() !== os.homedir() && process.chdir("..");
             printWorkingDir();
-        } else if(stringData.startsWith(CD_OP)){
-            const path = stringData.split(CD_OP)[1].trim();
+        } else if(stringData.startsWith(OPERATION.CD)){
+            const path = stringData.split(OPERATION.CD)[1].trim();
             process.chdir(path);
             printWorkingDir();
-        } else if(stringData === LS_OP){
+        } else if(stringData === OPERATION.LS){
           const dirContent = [];
 
           fs.readdir(process.cwd(), (err, files) => {
@@ -63,19 +63,29 @@ const byeUser = () => {
             printWorkingDir();
             
         }); 
-        } else if(stringData.startsWith(CAT_OP)){
-            const path = stringData.split(CAT_OP)[1].trim();
+        } else if(stringData.startsWith(OPERATION.CAT)){
+            const path = stringData.split(OPERATION.CAT)[1].trim();
             const readStream = fs.createReadStream(path);
-            readStream.on('data', (data) => console.log(data.toString()));
-            printWorkingDir();
+            readStream.on('data', (data) => {
+                console.log(data.toString());
+                printWorkingDir();
+            });
             
-        } else if(stringData.startsWith(ADD_OP)){
-            const path = stringData.split(ADD_OP)[1].trim();
+        } else if(stringData.startsWith(OPERATION.ADD)){
+            const path = stringData.split(OPERATION.ADD)[1].trim();
             const readStream = fs.createReadStream(path);
             fs.openSync(path, 'a');
             printWorkingDir();
             
-        } else {
+        } else if(stringData.startsWith(OPERATION.RN)){
+            const commandParts = stringData.split(OPERATION.RN)[1];
+            const oldFileName  = commandParts.split(' ')[0].trim();
+            const newFileName  = commandParts.split(' ')[1].trim();
+            
+            fs.rename(oldFileName, newFileName, (err) => err && console.log(err));
+            printWorkingDir();
+        }
+        else {
           showInvalidMessage();
         }
       
