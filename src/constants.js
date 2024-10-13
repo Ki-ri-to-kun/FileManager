@@ -6,5 +6,7 @@ export const OPERATION = {
   CAT: 'cat ',
   ADD: 'add ',
   RN: 'rn ',
-  CP: 'cp '
+  CP: 'cp ',
+  MV: 'mv ',
+  RM: 'rm '
 };

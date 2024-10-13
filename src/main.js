@@ -91,6 +91,25 @@ const byeUser = () => {
             
             fs.cp(oldFilePath, newFilePath, (err) => err && console.log(err));
             printWorkingDir();
+        } else if(stringData.startsWith(OPERATION.MV)){
+            const commandParts = stringData.split(OPERATION.MV)[1];
+            const oldFilePath  = commandParts.split(' ')[0].trim();
+            const newFilePath  = commandParts.split(' ')[1].trim();
+            
+            const readStream = fs.createReadStream(oldFilePath);
+            const writeStream = fs.createWriteStream(newFilePath);
+          
+            readStream.pipe(writeStream);
+          
+            readStream.on('close', () => {
+            fs.unlink(oldFilePath, (err) => err && console.log(err));
+            printWorkingDir();
+            });
+        } else if(stringData.startsWith(OPERATION.RM)){
+            const path = stringData.split(OPERATION.RM)[1];
+            
+            fs.unlink(path, (err) => err && console.log(err));
+            printWorkingDir();
         }
         else {
           showInvalidMessage();
