@@ -84,6 +84,13 @@ const byeUser = () => {
             
             fs.rename(oldFileName, newFileName, (err) => err && console.log(err));
             printWorkingDir();
+        } else if(stringData.startsWith(OPERATION.CP)){
+            const commandParts = stringData.split(OPERATION.CP)[1];
+            const oldFilePath  = commandParts.split(' ')[0].trim();
+            const newFilePath  = commandParts.split(' ')[1].trim();
+            
+            fs.cp(oldFilePath, newFilePath, (err) => err && console.log(err));
+            printWorkingDir();
         }
         else {
           showInvalidMessage();
