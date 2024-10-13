@@ -1,5 +1,6 @@
 import os from 'os';
 import fs from 'fs';
+import zlib from 'zlib';
 
 import {OPERATION} from './constants.js';
 
@@ -109,6 +110,29 @@ const byeUser = () => {
             const path = stringData.split(OPERATION.RM)[1];
             
             fs.unlink(path, (err) => err && console.log(err));
+            printWorkingDir();
+        } else if(stringData.startsWith(OPERATION.COMPRESS)){
+            const paths = stringData.split(OPERATION.COMPRESS)[1];
+            const oldFilePath  = paths.split(' ')[0].trim();
+            const newFilePath  = paths.split(' ')[1].trim();
+            
+            const input = fs.createReadStream(oldFilePath);
+            const output = fs.createWriteStream(newFilePath);
+   
+            const compress = zlib.createGzip();
+            input.pipe(compress).pipe(output);
+            
+            printWorkingDir();
+        } else if(stringData.startsWith(OPERATION.DECOMPRESS)){
+            const paths = stringData.split(OPERATION.DECOMPRESS)[1];
+            const oldFilePath  = paths.split(' ')[0].trim();
+            const newFilePath  = paths.split(' ')[1].trim();
+            
+            const input = fs.createReadStream(oldFilePath);
+            const output = fs.createWriteStream(newFilePath);
+            const decompress = zlib.createUnzip();
+            input.pipe(decompress).pipe(output);
+            
             printWorkingDir();
         }
         else {

@@ -8,5 +8,7 @@ export const OPERATION = {
   RN: 'rn ',
   CP: 'cp ',
   MV: 'mv ',
-  RM: 'rm '
+  RM: 'rm ',
+  COMPRESS: 'compress ',
+  DECOMPRESS: 'decompress '
 };
