@@ -153,7 +153,30 @@ const byeUser = () => {
                 printWorkingDir();
               }
             });
-        }
+        } else if(stringData.startsWith(OPERATION.OS.BASE)){
+           switch(stringData){
+             case OPERATION.OS.EOL:
+              console.log(JSON.stringify(os.EOL));
+              break;
+             case OPERATION.OS.CPUS:
+              console.log(os.cpus());
+              break;
+             case OPERATION.OS.HOMEDIR:
+              console.log(os.homedir());
+              break;
+             case OPERATION.OS.USERNAME:
+              console.log(os.userInfo().username);
+              break;
+             case OPERATION.OS.ARCHITECTURE:
+              console.log(process.arch);
+              break;
+             default:
+              console.log('unknown command');
+           }
+            
+            printWorkingDir();
+        } 
+         
         else {
           showInvalidMessage();
         }

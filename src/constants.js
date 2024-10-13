@@ -11,5 +11,13 @@ export const OPERATION = {
   RM: 'rm ',
   COMPRESS: 'compress ',
   DECOMPRESS: 'decompress ',
-  HASH: 'hash '
+  HASH: 'hash ',
+  OS: {
+    BASE: 'os ',
+    EOL: 'os --EOL',
+    CPUS: 'os --cpus',
+    HOMEDIR: 'os --homedir',
+    USERNAME: 'os --username',
+    ARCHITECTURE: 'os --architecture'
+  }
 };
