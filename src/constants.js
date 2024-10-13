@@ -10,5 +10,6 @@ export const OPERATION = {
   MV: 'mv ',
   RM: 'rm ',
   COMPRESS: 'compress ',
-  DECOMPRESS: 'decompress '
+  DECOMPRESS: 'decompress ',
+  HASH: 'hash '
 };

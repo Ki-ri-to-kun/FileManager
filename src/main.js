@@ -1,6 +1,7 @@
 import os from 'os';
 import fs from 'fs';
 import zlib from 'zlib';
+import {createHash} from 'node:crypto';
 
 import {OPERATION} from './constants.js';
 
@@ -134,6 +135,24 @@ const byeUser = () => {
             input.pipe(decompress).pipe(output);
             
             printWorkingDir();
+        } else if(stringData.startsWith(OPERATION.HASH)){
+            const path = stringData.split(OPERATION.HASH)[1];
+   
+            const hash = createHash('sha256');
+            const readStream = fs.createReadStream(path);
+              
+            readStream.on('data', (data) => {
+              hash.write(data);
+              hash.end();
+            });
+
+            hash.on('readable', () => {
+              const data = hash.read();
+              if(data) {
+                console.log(data.toString('hex'));
+                printWorkingDir();
+              }
+            });
         }
         else {
           showInvalidMessage();
